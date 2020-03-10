@@ -1,0 +1,39 @@
+<IfModule mod_rewrite.c>
+RewriteEngine on
+
+RewriteCond %{HTTP_HOST} ^www\.(.*)$
+RewriteRule ^(.*)$ http://%1/$1 [L,R=301]
+
+#перевести все на ссл
+#RewriteCond %{HTTPS} !=on
+#RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+#перевести все без ссл
+#RewriteCond %{HTTPS} =on
+#RewriteRule ^(.*)$ http://%{HTTP_HOST}/$1 [R=301,L]
+
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.(php|html|htm)\ HTTP/ 
+RewriteRule ^(.*)index\.(php|html|htm)$ https://gorizont.agency/ [R=301,L]
+
+RewriteCond $1 !^(index\.php|resources|robots\.txt)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?/$1 [L,QSA]
+
+<IfModule mod_env.c>
+    SetEnv CI_ENV production
+</IfModule>
+
+</IfModule>
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault "access plus 1 month"
+
+    ExpiresByType image/gif "access plus 2 months"
+    ExpiresByType image/png "access plus 2 months"
+
+    ExpiresByType application/javascript "access plus 2 months"
+    ExpiresByType text/javascript "access plus 2 months"
+ExpiresByType text/css "access plus 2 months"
+</IfModule>
